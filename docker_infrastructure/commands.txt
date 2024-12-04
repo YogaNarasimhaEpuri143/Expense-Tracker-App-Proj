@@ -1,0 +1,6 @@
+docker compose -f file.yml -d
+docker logs auth-service
+docker inspect <container-id> | grep IPAddress
+
+
+Internal DNS, resolve the I.P Addresses for containers.

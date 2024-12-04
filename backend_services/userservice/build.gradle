@@ -1,0 +1,53 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.2'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+group = 'com.yogadev'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext{
+	lombokVersion="1.18.30"
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.33'
+	implementation 'org.springframework.boot:spring-boot-starter-parent:2.6.2'
+
+	// Lombok Dependency
+	implementation group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
+	compileOnly group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
+	annotationProcessor group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
+	testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
+	testImplementation group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
+
+	implementation 'org.springframework.kafka:spring-kafka'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
+
+//	implementation 'org.hibernate.validator.hibernate-validator:8.0.1.Final'
+//	implementation 'org.springframework.boot.spring-boot-starter-validation:3.2.8'
+
+	implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '8.0.1.Final'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.2.8'
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

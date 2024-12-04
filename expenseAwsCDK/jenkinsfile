@@ -1,0 +1,88 @@
+pipeline{
+    
+    agent any
+
+    tools{
+        maven 'Maven'
+    }
+
+    parameters{
+        string(name: 'VERSION', defaultValue: '', description: 'version to deploy on prod')
+        choice(name: 'VERSION', choices:['1.1.0', '1.2.0', '1.3.0'], description: 'versions allowed to deploy on prod')
+        booleanParam(name: 'executeTests', defaultValue: true, description: 'Switich to execute tests/not')
+    }
+
+    environment{
+        NEW_VERSION = "1.3.0"
+        SERVER_CREDENTIALS = credentials('id-name-here')    // Binds the credentials to env Variable.
+    }
+
+    stages{
+
+        stage("init"){
+            steps{
+                scripts{
+                    gv = load "script.groovy"
+                }
+            }
+        } 
+
+        stage("build"){
+            when{
+                expression{
+                    BRANCH_NAME == "dev" && CODE_CHANGES == true
+                }
+            }
+            steps{
+                bat "Building the application..."
+                bat "Building version ${NEW_VERSION}..."
+                bat "mvn install"
+
+                gv.buildApp()
+            }  
+        }
+
+        stage("test"){
+            when{
+                expression{
+                    params.executeTests
+                }
+            }
+            steps{
+            }
+        }
+
+        stage("deploy"){
+            steps{
+                bat "Deploying the application..."
+                withCredentials([
+                    usernamePassword(credentials: 'server-credentials', usernameVariable: USER, passwordVariable: PWD)
+                ]){
+                    bat "Some Script ${USER} ${PWD}..."
+                    bat "Deploying Version: ${params.VERSION}"
+                }
+            }
+        }
+        stage("cleanup"){
+            steps{}
+        }
+    }
+}
+
+// Current Build Number, can be used for Versioning. 
+// Credentials
+
+// Credentials plugin           => Allow to create the credentials in the UI.
+// Credentials Binding Plugin   => Allow to use the credentials in the jenkinsfile.
+// credentials()
+
+// Parameterized the Deployments
+// Build with parameters
+// 
+
+
+// 1. Helm is package manager & automation technology for Kubernetes that simplifies the deployment of applications and services.
+// 2. Helm chart contains all the resources needed to deploy an application to a Kubernetes cluster.
+// 3. Helm 2 & 3
+// 4. Helm Client manages the helm repositories. (Add, remove, updating helm charts)
+// 5. 

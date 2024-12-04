@@ -1,0 +1,11 @@
+stateless session in a web application, particularly in the context of security and authentication, it means that the server does not maintain
+any information about the user's session between requests.
+Each request from the client is treated independently, and the server does not store any session-related data.
+
+
+No Persistent Session State:
+    Since the session is stateless, the server does not keep track of user sessions.
+    Therefore, the SecurityContext will be null on every request unless the user provides authentication credentials (like a token) with each request.
+
+
+Need to check SessionID present (or) not.
